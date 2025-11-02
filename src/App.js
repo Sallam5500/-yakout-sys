@@ -1,25 +1,67 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
+import Login from "./pages/Login";
+import Dashboard from "./pages/Dashboard";
+import StoreDashboard from "./pages/StoreDashboard";
+import StockPage from "./pages/StockPage";
+import IncomingGoods from "./pages/IncomingGoods";
+import OutgoingGoods from "./pages/OutgoingGoods";
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [section, setSection] = useState(null);
+  const [subSection, setSubSection] = useState(null);
+
+  const [stockItems, setStockItems] = useState([]); // المصدر الوحيد للبيانات
+
+  const handleLogin = () => setIsLoggedIn(true);
+  
+  const handleSelectSection = (sec) => {
+    setSection(sec);
+    setSubSection(null);
+  };
+
+  const handleSelectSubSection = (subSec) => setSubSection(subSec);
+
+  if (!isLoggedIn) return <Login onLogin={handleLogin} />;
+
+  if (section === "stock") {
+    if (!subSection)
+      return (
+        <StoreDashboard
+          onSelectSection={handleSelectSubSection}
+          showBackButton={() => setSection(null)}
+        />
+      );
+
+    if (subSection === "stock-main")
+      return (
+        <StockPage
+          stockItems={stockItems}
+          setStockItems={setStockItems}
+          onBack={() => setSubSection(null)}
+        />
+      );
+
+    if (subSection === "incoming")
+      return (
+        <IncomingGoods
+          stockItems={stockItems}
+          setStockItems={setStockItems}
+          onBack={() => setSubSection(null)}
+        />
+      );
+
+    if (subSection === "outgoing")
+      return (
+        <OutgoingGoods
+          stockItems={stockItems}
+          setStockItems={setStockItems}
+          onBack={() => setSubSection(null)}
+        />
+      );
+  }
+
+  return <Dashboard onSelectSection={handleSelectSection} />;
 }
 
 export default App;
