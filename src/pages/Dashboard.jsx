@@ -8,7 +8,7 @@ const Dashboard = ({ onSelectSection }) => {
     { id: "store", title: "المحلات 🏬" },
     { id: "purchases", title: "المشتريات 🧾" },
     { id: "maintenance", title: "الصيانة والنظافة 🧹" },
-    { id: "employees", title: "الموظفين 👨‍💼" }, // ✅ تم إضافة هذا القسم
+    { id: "employees", title: "العبيد 👨‍💼" }, // ✅ تم إضافة هذا القسم
   ];
 
   return (
