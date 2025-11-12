@@ -1,0 +1,61 @@
+.factory-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* لتوسيط العناصر أفقياً */
+  justify-content: flex-start; /* يبدأ من فوق */
+  padding: 20px;
+  background-color: #b8e0b8;
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+
+.factory-section h1 {
+  margin-bottom: 20px;
+}
+
+.controls {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-bottom: 20px;
+  width: 80%; /* العرض محدود لتنسيق أفضل */
+}
+
+.dropdown-control, .input-control {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: center; /* لتوسيط inputs داخل الصف */
+  align-items: center;
+}
+
+.styled-table {
+  width: 80%; /* الجدول في منتصف الصفحة */
+  border-collapse: collapse;
+  background-color: #ffffffcc;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  text-align: center;
+}
+
+.styled-table th, .styled-table td {
+  border: 1px solid #ddd;
+  padding: 10px;
+}
+
+.styled-table th {
+  background-color: #4caf50;
+  color: white;
+}
+
+.styled-table tbody tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+.styled-table tbody tr:hover {
+  background-color: #d1f7d1;
+}
+
+button {
+  padding: 5px 10px;
+  cursor: pointer;
+}

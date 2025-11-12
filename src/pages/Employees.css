@@ -1,0 +1,103 @@
+.employees-dashboard {
+  padding: 20px;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f0f8ff, #d3f4ff);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.dashboard-title {
+  font-size: 32px;
+  margin-bottom: 25px;
+  color: #1a3d5c;
+  text-align: center;
+}
+
+.cards-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+  width: 100%;
+  max-width: 1200px;
+}
+
+.card {
+  background: white;
+  padding: 20px;
+  border-radius: 20px;
+  text-align: center;
+  cursor: pointer;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-8px) scale(1.05);
+  box-shadow: 0 12px 25px rgba(0,0,0,0.3);
+}
+
+.back-btn {
+  align-self: flex-start;
+  margin-bottom: 20px;
+  padding: 8px 15px;
+  font-size: 16px;
+  cursor: pointer;
+}
+/* الكروت */
+.cards-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 30px; /* هنا زدنا الفجوة بين الكروت */
+  justify-items: center;
+  width: 100%;
+  max-width: 1200px;
+}
+
+/* كل كارت */
+.card {
+  background: white;
+  color: #1a1a1a;
+  width: 360px;
+  height: 240px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  border-radius: 25px;
+  cursor: pointer;
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+  position: relative;
+  overflow: hidden;
+  animation: bounceIn 0.8s ease;
+  margin-bottom: 20px; /* مسافة إضافية للأسفل */
+}
+
+/* Responsive: الشاشات الصغيرة */
+@media (max-width: 992px) {
+  .cards-container {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 25px; /* فجوة مناسبة للشاشات المتوسطة */
+  }
+}
+
+@media (max-width: 768px) {
+  .cards-container {
+    grid-template-columns: 1fr;
+    gap: 25px; /* كل كارت لوحده */
+  }
+  .card {
+    width: 90%;
+  }
+}
+
+@media (max-width: 500px) {
+  .cards-container {
+    gap: 20px;
+  }
+  .card {
+    width: 95%;
+  }
+}

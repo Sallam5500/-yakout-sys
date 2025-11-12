@@ -1,0 +1,149 @@
+/* خلفية الصفحة */
+.branch-section {
+  background: linear-gradient(to bottom, #a8e6a2, #5fb46b);
+  min-height: 100vh;
+  padding: 20px;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  color: #000;
+}
+
+/* زر الرجوع */
+.back-btn {
+  background-color: #ffffffaa;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: 0.3s;
+}
+.back-btn:hover {
+  background-color: #ffffff;
+}
+
+/* عنوان القسم */
+.branch-section h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 28px;
+}
+
+/* Controls فوق الجدول */
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.controls input,
+.controls button {
+  padding: 8px 12px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+}
+
+.controls button {
+  background-color: #ffffffaa;
+  cursor: pointer;
+  font-weight: bold;
+  transition: 0.3s;
+}
+
+.controls button:hover {
+  background-color: #ffffff;
+}
+
+/* الجدول */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: #ffffffbb;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+thead {
+  background-color: #4caf50;
+  color: white;
+}
+
+th, td {
+  padding: 10px;
+  text-align: center;
+  border-bottom: 1px solid #ddd;
+}
+
+tbody tr:nth-child(even) {
+  background-color: #f1f1f1;
+}
+
+tbody tr:hover {
+  background-color: #d1ffd1;
+}
+
+/* الأزرار داخل الجدول */
+table button {
+  padding: 5px 10px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: 0.3s;
+  font-size: 12px;
+}
+
+table button:hover {
+  opacity: 0.8;
+}
+
+table button:nth-child(1) { background-color: #4caf50; color: white; } /* حفظ */
+table button:nth-child(2) { background-color: #2196f3; color: white; } /* تعديل */
+table button:nth-child(3) { background-color: #f44336; color: white; } /* حذف */
+
+/* Inputs داخل الجدول */
+table input[type="text"],
+table input[type="number"],
+table input[type="time"] {
+  padding: 4px 6px;
+  width: 100%;
+  box-sizing: border-box;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .controls {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  table th, table td {
+    font-size: 12px;
+    padding: 6px;
+  }
+}
+/* كروت ملخص الأصناف */
+.cards-summary {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 20px;
+  justify-content: center;
+}
+
+.summary-card {
+  background-color: #ffffffcc;
+  padding: 10px 15px;
+  border-radius: 12px;
+  text-align: center;
+  min-width: 120px;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.2);
+  transition: transform 0.2s;
+}
+
+.summary-card:hover {
+  transform: translateY(-5px);
+}
