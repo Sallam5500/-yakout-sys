@@ -1,5 +1,15 @@
 // src/pages/Employees.jsx
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { db, storage } from "../firebase";
+import {
+  collection,
+  addDoc,
+  updateDoc,
+  deleteDoc,
+  doc,
+  onSnapshot,
+} from "firebase/firestore";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import "./Employees.css";
 
 const sections = [
@@ -17,35 +27,106 @@ const sections = [
 const Employees = ({ onBack }) => {
   const [employees, setEmployees] = useState([]);
   const [search, setSearch] = useState("");
+  const [editingId, setEditingId] = useState(null);
+
   const [newEmployee, setNewEmployee] = useState({
     name: "",
     age: "",
     status: "أعزب",
     tasks: "",
-    photo: null,
     section: sections[0],
+    photoFile: null,
   });
 
-  // إضافة موظف
-  const handleAddEmployee = () => {
-    if (!newEmployee.name || !newEmployee.age) return;
-    setEmployees([...employees, { ...newEmployee, id: Date.now() }]);
-    setNewEmployee({ name: "", age: "", status: "أعزب", tasks: "", photo: null, section: sections[0] });
+  // -----------------------------
+  // 🟢 جلب الموظفين بشكل لحظي من Firestore
+  // -----------------------------
+  useEffect(() => {
+    const unsub = onSnapshot(collection(db, "employees"), (snapshot) => {
+      const data = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+      setEmployees(data);
+    });
+    return () => unsub();
+  }, []);
+
+  // -----------------------------
+  // 🔵 رفع الصورة على Storage
+  // -----------------------------
+  const handlePhotoUpload = async (file) => {
+    if (!file) return null;
+    const storageRef = ref(storage, `employees/${file.name}_${Date.now()}`);
+    await uploadBytes(storageRef, file);
+    const url = await getDownloadURL(storageRef);
+    return url;
   };
 
-  // حذف موظف
-  const handleDeleteEmployee = (id) => {
-    setEmployees(employees.filter((emp) => emp.id !== id));
-  };
+  // -----------------------------
+  // 🟡 إضافة أو تعديل موظف
+  // -----------------------------
+  const handleAddOrEditEmployee = async () => {
+    if (!newEmployee.name || !newEmployee.age) return alert("املأ البيانات كاملة");
 
-  // تحميل صورة
-  const handlePhotoChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = () => setNewEmployee({ ...newEmployee, photo: reader.result });
-      reader.readAsDataURL(file);
+    let photoURL = null;
+    if (newEmployee.photoFile) {
+      photoURL = await handlePhotoUpload(newEmployee.photoFile);
     }
+
+    if (editingId) {
+      // تعديل
+      const docRef = doc(db, "employees", editingId);
+      await updateDoc(docRef, {
+        name: newEmployee.name,
+        age: newEmployee.age,
+        status: newEmployee.status,
+        tasks: newEmployee.tasks,
+        section: newEmployee.section,
+        ...(photoURL && { photo: photoURL }),
+      });
+      setEditingId(null);
+    } else {
+      // إضافة جديد
+      await addDoc(collection(db, "employees"), {
+        name: newEmployee.name,
+        age: newEmployee.age,
+        status: newEmployee.status,
+        tasks: newEmployee.tasks,
+        section: newEmployee.section,
+        photo: photoURL,
+        createdAt: new Date().toISOString(),
+      });
+    }
+
+    setNewEmployee({
+      name: "",
+      age: "",
+      status: "أعزب",
+      tasks: "",
+      section: sections[0],
+      photoFile: null,
+    });
+  };
+
+  // -----------------------------
+  // ✏️ تعديل الموظف
+  // -----------------------------
+  const handleEditEmployee = (emp) => {
+    setEditingId(emp.id);
+    setNewEmployee({
+      name: emp.name,
+      age: emp.age,
+      status: emp.status,
+      tasks: emp.tasks,
+      section: emp.section,
+      photoFile: null, // رفع صورة جديدة فقط
+    });
+  };
+
+  // -----------------------------
+  // ❌ حذف الموظف
+  // -----------------------------
+  const handleDeleteEmployee = async (id) => {
+    if (!window.confirm("هل أنت متأكد من الحذف؟")) return;
+    await deleteDoc(doc(db, "employees", id));
   };
 
   const filteredEmployees = employees.filter((emp) =>
@@ -100,8 +181,14 @@ const Employees = ({ onBack }) => {
             <option key={sec} value={sec}>{sec}</option>
           ))}
         </select>
-        <input type="file" accept="image/*" onChange={handlePhotoChange} />
-        <button onClick={handleAddEmployee}>إضافة موظف</button>
+        <input
+          type="file"
+          accept="image/*"
+          onChange={(e) => setNewEmployee({ ...newEmployee, photoFile: e.target.files[0] })}
+        />
+        <button onClick={handleAddOrEditEmployee}>
+          {editingId ? "تحديث الموظف" : "إضافة موظف"}
+        </button>
       </div>
 
       <div className="employees-cards">
@@ -113,6 +200,7 @@ const Employees = ({ onBack }) => {
             <p>الحالة: {emp.status}</p>
             <p>المهام: {emp.tasks}</p>
             <p>القسم: {emp.section}</p>
+            <button onClick={() => handleEditEmployee(emp)}>تعديل</button>
             <button onClick={() => handleDeleteEmployee(emp.id)}>حذف</button>
           </div>
         ))}
